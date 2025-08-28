@@ -1010,6 +1010,13 @@
             
             const bond1Name = document.getElementById('bondName1').value || 'Bond 1';
             const bond2Name = document.getElementById('bondName2').value || 'Bond 2';
+
+            const bond1InterestMethod = document
+            .querySelector(`input[name="interestMethod1"]:checked`)
+            .value === 'regular' ? 'Regular 30-day Intervals' : 'Actual Days (Same Day Each Month)';
+            const bond2InterestMethod = document
+            .querySelector(`input[name="interestMethod2"]:checked`)
+            .value === 'regular' ? 'Regular 30-day Intervals' : 'Actual Days (Same Day Each Month)';
             
             const faceValue1 = parseFloat(document.getElementById('faceValue1').value);
             const units1 = parseInt(document.getElementById('units1').value);
@@ -1063,14 +1070,44 @@
             let comparisonSummary = '';
             let winnerDisplay = '';
             
+            // comparisonSummary = `<strong>Bond 1:</strong> ${bond1Name} (${bond1InterestMethod})<br>`;
+            // comparisonSummary += `<strong>Bond 2:</strong> ${bond2Name} (${bond2InterestMethod}})<br><br>`;
+            
+            // if (yieldValue1 > yieldValue2) {
+            //     comparisonSummary += `${bond1Name} has a higher yield (${yieldValue1.toFixed(2)}% vs ${yieldValue2.toFixed(2)}%)`;
+            //     winner = `${bond1Name} is the better investment`;
+            //     document.getElementById('winnerDisplay').className = "winner bond-1-winner";
+            // } else if (yieldValue2 > yieldValue1) {
+            //     comparisonSummary += `${bond2Name} has a higher yield (${yieldValue2.toFixed(2)}% vs ${yieldValue1.toFixed(2)}%)`;
+            //     winner = `${bond2Name} is the better investment`;
+            //     document.getElementById('winnerDisplay').className = "winner bond-2-winner";
+            // } else {
+            //     comparisonSummary += `Both bonds have the same yield (${yieldValue1.toFixed(2)}%)`;
+            //     winner = "It's a tie between both bonds";
+            //     document.getElementById('winnerDisplay').className = "winner tie";
+            // }
+            
+            // comparisonSummary += `<br>${bond1Name} after-tax returns: ₹${bond1.afterTaxReturns.toLocaleString('en-IN', {maximumFractionDigits: 2})}`;
+            // comparisonSummary += `<br>${bond2Name} after-tax returns: ₹${bond2.afterTaxReturns.toLocaleString('en-IN', {maximumFractionDigits: 2})}`;
+            
+            //document.getElementById('comparisonSummary').innerHTML = comparisonSummary;
+            //document.getElementById('winnerDisplay').innerHTML = winner;
+            //document.getElementById('comparisonResult').style.display = 'block';
+
+
+            comparisonSummary = `<strong>Bond 1:</strong> ${bond1Name} (${bond1InterestMethod}<br>`;
+            comparisonSummary += `<strong>Bond 2:</strong> ${bond2Name} (${bond2InterestMethod}<br><br>`;
+
             if (afterTaxInterest1 > afterTaxInterest2) {
                 const difference = afterTaxInterest1 - afterTaxInterest2;
-                comparisonSummary = `${bond1Name} provides ₹${difference.toLocaleString('en-IN', {maximumFractionDigits: 2})} more returns than ${bond2Name}`;
+                comparisonSummary += `${bond1Name} has a higher yield (${yieldValue1.toFixed(2)}% vs ${yieldValue2.toFixed(2)}%)<br>`;
+                comparisonSummary += `${bond1Name} provides ₹${difference.toLocaleString('en-IN', {maximumFractionDigits: 2})} more returns than ${bond2Name}`;
                 winnerDisplay = `${bond1Name} is the better investment`;
                 document.getElementById('winnerDisplay').className = 'winner bond-1-winner';
             } else if (afterTaxInterest2 > afterTaxInterest1) {
                 const difference = afterTaxInterest2 - afterTaxInterest1;
-                comparisonSummary = `${bond2Name} provides ₹${difference.toLocaleString('en-IN', {maximumFractionDigits: 2})} more returns than ${bond1Name}`;
+                comparisonSummary += `${bond2Name} has a higher yield (${yieldValue2.toFixed(2)}% vs ${yieldValue1.toFixed(2)}%)<br>`;
+                comparisonSummary += `${bond2Name} provides ₹${difference.toLocaleString('en-IN', {maximumFractionDigits: 2})} more returns than ${bond1Name}`;
                 winnerDisplay = `${bond2Name} is the better investment`;
                 document.getElementById('winnerDisplay').className = 'winner bond-2-winner';
             } else {
@@ -1079,8 +1116,9 @@
                 document.getElementById('winnerDisplay').className = 'winner tie';
             }
             
-            document.getElementById('comparisonSummary').textContent = comparisonSummary;
-            document.getElementById('winnerDisplay').textContent = winnerDisplay;
+            document.getElementById('comparisonSummary').innerHTML = comparisonSummary;
+             //document.getElementById('comparisonSummary').textContent = comparisonSummary;
+             document.getElementById('winnerDisplay').textContent = winnerDisplay;
             
             // Scroll to comparison result for better mobile experience
             comparisonResult.scrollIntoView({ behavior: 'smooth' });
