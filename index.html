@@ -1009,7 +1009,6 @@
             
             const resultsContainer = document.getElementById(`bondResults${bondNumber}`);
             resultsContainer.innerHTML = resultsHTML;
-            //resultsContainer.querySelector('.repayment-table-container').appendChild(repaymentTable);
 
             if(bondNumber === 1){
                 document.getElementById(`bondResults1`).style.display = 'block';   
@@ -1023,19 +1022,14 @@
                     </div>
                 </div>`;
                 document.getElementById(`bondResults2-table`).innerHTML= '';
-
-                //document.getElementById(`bondResults1-table`).style.display = 'block';
-                //document.getElementById(`bondResults2-table`).style.display= 'none';
                 
                 const resultsTableContainer = document.getElementById(`bondResults1-table`);
                 resultsTableContainer.querySelector(`#bond1-result-table`).appendChild(repaymentTable);
-                //document.getElementById(`bondResults1-table`).appendChild(repaymentTable);
 
             } else {
                 document.getElementById(`bondResults2`).style.display = 'block';
                 document.getElementById(`bondResults1`).style.display = 'block';
 
-                //document.getElementById(`bondResults1-table`).style.visibility = 'visible';
                 document.getElementById(`bondResults2-table`).innerHTML = `
                 <div class="result-card">
                     <div class="result-title" style="color:  #3b82f6;">Repayment Schedule</div>
@@ -1043,9 +1037,6 @@
                         <!-- Table will be inserted here -->
                     </div>
                 </div>`;
-            
-                //document.getElementById(`bondResults1-table`).style.display = 'block';
-                //document.getElementById(`bondResults2-table`).style.display = 'block';
 
                 const resultsTableContainer = document.getElementById(`bondResults2-table`);
                 resultsTableContainer.querySelector(`#bond2-result-table`).appendChild(repaymentTable);
@@ -1173,9 +1164,6 @@
             document.getElementById('compareBtn').style.display = 'none';
             document.getElementById('addBondBtn').style.display = 'inline-block';
 
-            //document.getElementById(`bondResults1-table`).style.visibility = 'hidden';
-            //document.getElementById(`bondResults2-table`).style.visibility= 'hidden';
-            
             setDefaultDates();
         }
         
@@ -1215,12 +1203,6 @@
             document.getElementById('maturityDate2').addEventListener('change', function() {
                 updateYTM(2);
             });
-
-            //document.getElementById(`bondResults1-table`).style.visibility = 'hidden';
-            //document.getElementById(`bondResults2-table`).style.visibility = 'hidden';
-
-            //document.getElementById(`bondResults1-table`).style.display= 'none';
-            //document.getElementById(`bondResults2-table`).style.display= 'none';
 
         };
         
