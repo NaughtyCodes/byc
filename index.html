@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bond Investment Calculator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(to right, #2563eb, #1e40af);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .comparison-container {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+            gap: 20px;
+        }
+        
+        .bond-form {
+            flex: 1;
+            min-width: 400px;
+            padding: 20px;
+            border-radius: 10px;
+            background: #f8fafc;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .bond-form-1 {
+            border-top: 5px solid #3b82f6;
+        }
+        
+        .bond-form-2 {
+            border-top: 5px solid #10b981;
+            display: none;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #374151;
+            font-size: 14px;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 8px;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .radio-option input[type="radio"] {
+            width: auto;
+            margin-right: 5px;
+        }
+        
+        button {
+            padding: 12px 20px;
+            background: linear-gradient(to right, #2563eb, #1e40af);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            margin-right: 10px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .compare-btn {
+            background: linear-gradient(to right, #10b981, #059669);
+        }
+        
+        .add-bond-btn {
+            background: linear-gradient(to right, #8b5cf6, #7c3aed);
+        }
+        
+        .reset-btn {
+            background: linear-gradient(to right, #ef4444, #dc2626);
+        }
+        
+        .button-container {
+            display: flex;
+            justify-content: center;
+            padding: 10px 20px 20px;
+            gap: 15px;
+        }
+        
+        .results-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 0 20px 20px;
+        }
+        
+        .bond-results {
+            flex: 1;
+            min-width: 400px;
+        }
+        
+        .result-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .result-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e40af;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .result-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #059669;
+            text-align: center;
+            margin: 8px 0;
+        }
+        
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .result-item {
+            text-align: center;
+        }
+        
+        .result-item .label {
+            font-size: 13px;
+            color: #6b7280;
+        }
+        
+        .result-item .value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 13px;
+        }
+        
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        th {
+            background-color: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        tr:hover {
+            background-color: #f3f4f6;
+        }
+        
+        .positive {
+            color: #059669;
+            font-weight: 600;
+        }
+        
+        .negative {
+            color: #dc2626;
+            font-weight: 600;
+        }
+        
+        .info-text {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+        
+        .date-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .repayment-table-container {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 10px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+        }
+        
+        .bond-1-table {
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .bond-2-table {
+            border-left: 4px solid #10b981;
+        }
+        
+        .comparison-result {
+            text-align: center;
+            padding: 15px;
+            margin: 0 20px 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .comparison-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 10px;
+        }
+        
+        .winner {
+            font-size: 20px;
+            font-weight: 700;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        
+        .bond-1-winner {
+            background: rgba(59, 130, 246, 0.2);
+            color: #1e40af;
+        }
+        
+        .bond-2-winner {
+            background: rgba(16, 185, 129, 0.2);
+            color: #065f46;
+        }
+        
+        .tie {
+            background: rgba(156, 163, 175, 0.2);
+            color: #374151;
+        }
+        
+        @media (max-width: 900px) {
+            .comparison-container {
+                flex-direction: column;
+            }
+            
+            .date-inputs {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Bond Investment Calculator</h1>
+            <p class="subtitle">Compare bonds with different interest calculation methods</p>
+        </header>
+        
+        <div class="comparison-container">
+            <div class="bond-form bond-form-1">
+                <h2>Bond 1</h2>
+                <div class="form-group">
+                    <label for="bondName1">Bond Name</label>
+                    <input type="text" id="bondName1" placeholder="Bond Name (default: Bond 1)">
+                    <p class="info-text">If not provided, will use "Bond 1" as default</p>
+                </div>
+                
+                <div class="form-group date-inputs">
+                    <div>
+                        <label for="buyDate1">Buy Date</label>
+                        <input type="date" id="buyDate1">
+                    </div>
+                    <div>
+                        <label for="maturityDate1">Maturity Date</label>
+                        <input type="date" id="maturityDate1">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="faceValue1">Face Value (₹)</label>
+                    <input type="number" id="faceValue1" placeholder="Enter face value" value="10000">
+                </div>
+                
+                <div class="form-group">
+                    <label for="units1">Number of Units</label>
+                    <input type="number" id="units1" placeholder="Enter number of units" value="10">
+                </div>
+                
+                <div class="form-group">
+                    <label for="premium1">Premium per Unit (₹)</label>
+                    <input type="number" id="premium1" placeholder="Enter premium amount" value="25">
+                </div>
+                
+                <div class="form-group">
+                    <label for="couponRate1">Coupon Rate (%)</label>
+                    <input type="number" id="couponRate1" placeholder="Enter coupon rate" value="10" step="0.01">
+                </div>
+				
+				<div class="form-group">
+                    <label for="ytmRate1">Yield to Maturity Rate (%)</label>
+                    <input type="number" id="ytmRate1" placeholder="Enter YTM rate" value="" step="0.01" readonly>
+                    <p class="info-text">YTM is calculated automatically based on other inputs</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="standardTax1">Standard Tax Rate (%)</label>
+                    <input type="number" id="standardTax1" placeholder="Enter standard tax rate" value="10" step="0.01">
+                </div>
+                
+                <div class="form-group">
+                    <label for="slabTax1">Your Slab Tax Rate (%)</label>
+                    <input type="number" id="slabTax1" placeholder="Enter your slab tax rate" value="20" step="0.01">
+                </div>
+                
+                <div class="form-group">
+                    <label for="interestFrequency1">Interest Frequency</label>
+                    <select id="interestFrequency1">
+                        <option value="monthly" selected>Monthly</option>
+                        <option value="quarterly">Quarterly</option>
+                        <option value="annually">Annually</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Interest Calculation Method</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="regularInterval1" name="interestMethod1" value="regular">
+                            <label for="regularInterval1">Regular 30-day Intervals</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="actualDays1" name="interestMethod1" value="actual" checked>
+                            <label for="actualDays1">Actual Days (Same Day Each Month)</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bond-form bond-form-2">
+                <h2>Bond 2</h2>
+                <div class="form-group">
+                    <label for="bondName2">Bond Name</label>
+                    <input type="text" id="bondName2" placeholder="Bond Name (default: Bond 2)">
+                    <p class="info-text">If not provided, will use "Bond 2" as default</p>
+                </div>
+                
+                <div class="form-group date-inputs">
+                    <div>
+                        <label for="buyDate2">Buy Date</label>
+                        <input type="date" id="buyDate2">
+                    </div>
+                    <div>
+                        <label for="maturityDate2">Maturity Date</label>
+                        <input type="date" id="maturityDate2">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="faceValue2">Face Value (₹)</label>
+                    <input type="number" id="faceValue2" placeholder="Enter face value" value="10000">
+                </div>
+                
+                <div class="form-group">
+                    <label for="units2">Number of Units</label>
+                    <input type="number" id="units2" placeholder="Enter number of units" value="10">
+                </div>
+                
+                <div class="form-group">
+                    <label for="premium2">Premium per Unit (₹)</label>
+                    <input type="number" id="premium2" placeholder="Enter premium amount" value="150">
+                </div>
+                
+                <div class="form-group">
+                    <label for="couponRate2">Coupon Rate (%)</label>
+                    <input type="number" id="couponRate2" placeholder="Enter coupon rate" value="10.45" step="0.01">
+                </div>
+				
+				<div class="form-group">
+                    <label for="ytmRate2">Yield to Maturity Rate (%)</label>
+                    <input type="number" id="ytmRate2" placeholder="Enter YTM rate" value="" step="0.01" readonly>
+                    <p class="info-text">YTM is calculated automatically based on other inputs</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="standardTax2">Standard Tax Rate (%)</label>
+                    <input type="number" id="standardTax2" placeholder="Enter standard tax rate" value="10" step="0.01">
+                </div>
+                
+                <div class="form-group">
+                    <label for="slabTax2">Your Slab Tax Rate (%)</label>
+                    <input type="number" id="slabTax2" placeholder="Enter your slab tax rate" value="20" step="0.01">
+                </div>
+                
+                <div class="form-group">
+                    <label for="interestFrequency2">Interest Frequency</label>
+                    <select id="interestFrequency2">
+                        <option value="monthly" selected>Monthly</option>
+                        <option value="quarterly">Quarterly</option>
+                        <option value="annually">Annually</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Interest Calculation Method</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="regularInterval2" name="interestMethod2" value="regular">
+                            <label for="regularInterval2">Regular 30-day Intervals</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="actualDays2" name="interestMethod2" value="actual" checked>
+                            <label for="actualDays2">Actual Days (Same Day Each Month)</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="button-container">
+            <button onclick="calculateBond(1)">Calculate Bond Returns</button>
+            <button class="add-bond-btn" onclick="addSecondBond()" id="addBondBtn">Compare Another Bond</button>
+            <button class="compare-btn" onclick="compareBonds()" id="compareBtn" style="display: none;">Compare Bonds</button>
+            <button class="reset-btn" onclick="resetForm()">Reset</button>
+        </div>
+        
+        <div class="comparison-result" id="comparisonResult" style="display: none;">
+            <div class="comparison-title">Comparison Result</div>
+            <div id="comparisonSummary">-</div>
+            <div class="winner" id="winnerDisplay">-</div>
+        </div>
+        
+        <div class="results-container">
+            <div class="bond-results" id="bondResults1">
+                <!-- Results for Bond 1 will be inserted here -->
+            </div>
+            
+            <div class="bond-results" id="bondResults2">
+                <!-- Results for Bond 2 will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set default dates
+        function setDefaultDates() {
+            const today = new Date();
+            
+            // Set dates for Bond 1
+            const buyDateInput1 = document.getElementById('buyDate1');
+            const maturityDateInput1 = document.getElementById('maturityDate1');
+            
+            const todayFormatted = today.toISOString().split('T')[0];
+            buyDateInput1.value = todayFormatted;
+            
+            const maturityDate1 = new Date();
+            maturityDate1.setFullYear(today.getFullYear() + 5);
+            const maturityFormatted1 = maturityDate1.toISOString().split('T')[0];
+            maturityDateInput1.value = maturityFormatted1;
+            
+            // Set dates for Bond 2
+            const buyDateInput2 = document.getElementById('buyDate2');
+            const maturityDateInput2 = document.getElementById('maturityDate2');
+            
+            buyDateInput2.value = todayFormatted;
+            
+            const maturityDate2 = new Date();
+            maturityDate2.setFullYear(today.getFullYear() + 7);
+            const maturityFormatted2 = maturityDate2.toISOString().split('T')[0];
+            maturityDateInput2.value = maturityFormatted2;
+        }
+        
+        // Add second bond form
+        function addSecondBond() {
+            document.querySelector('.bond-form-2').style.display = 'block';
+            document.getElementById('compareBtn').style.display = 'inline-block';
+            document.getElementById('addBondBtn').style.display = 'none';
+        }
+        
+        // Calculate days between two dates
+        function daysBetween(date1, date2) {
+            const oneDay = 24 * 60 * 60 * 1000;
+            const firstDate = new Date(date1);
+            const secondDate = new Date(date2);
+            
+            const date1_ms = firstDate.getTime();
+            const date2_ms = secondDate.getTime();
+            
+            const difference_ms = Math.abs(date2_ms - date1_ms);
+            
+            return Math.round(difference_ms / oneDay);
+        }
+        
+        // Calculate YTM based on inputs
+        function calculateYTM(faceValue, premium, couponRate, daysToMaturity) {
+            const yearsToMaturity = daysToMaturity / 365.25;
+            const annualInterest = faceValue * (couponRate / 100);
+            const totalInvestment = (faceValue + premium);
+            const capitalGain = faceValue - totalInvestment;
+            
+            const approxYTM = (annualInterest + (capitalGain / yearsToMaturity)) / ((faceValue + totalInvestment) / 2);
+            
+            return Math.max(0, approxYTM * 100);
+        }
+        
+        // Generate repayment schedule based on selected method
+        function generateRepaymentSchedule(faceValue, units, premium, couponRate, buyDate, maturityDate, frequency, standardTax, slabTax, interestMethod, bondColor) {
+            const schedule = [];
+            const totalAmount = (faceValue) * units;
+            let remainingBalance = totalAmount;
+            const daysToMaturity = daysBetween(buyDate, maturityDate);
+            
+            const dailyInterestRate = (couponRate / 100) / 365.25;
+            const totalInterest = totalAmount * dailyInterestRate * daysToMaturity;
+            
+            const effectiveTaxRate = Math.max(standardTax, slabTax);
+            const taxAmount = totalInterest * (effectiveTaxRate / 100);
+            const netInterest = totalInterest - taxAmount;
+            
+            let paymentsPerYear, paymentLabel, daysPerPayment;
+            
+            switch(frequency) {
+                case 'monthly':
+                    paymentsPerYear = 12;
+                    paymentLabel = 'Month';
+                    daysPerPayment = interestMethod === 'regular' ? 30 : 0;
+                    break;
+                case 'quarterly':
+                    paymentsPerYear = 4;
+                    paymentLabel = 'Quarter';
+                    daysPerPayment = interestMethod === 'regular' ? 91 : 0;
+                    break;
+                case 'annually':
+                    paymentsPerYear = 1;
+                    paymentLabel = 'Year';
+                    daysPerPayment = interestMethod === 'regular' ? 365 : 0;
+                    break;
+            }
+            
+            let totalPayments, interestPerPeriod, taxPerPeriod, netInterestPerPeriod;
+            
+            if (interestMethod === 'regular') {
+                // Regular interval calculation
+                totalPayments = Math.floor(daysToMaturity / daysPerPayment);
+                interestPerPeriod = totalInterest / totalPayments;
+                taxPerPeriod = taxAmount / totalPayments;
+                netInterestPerPeriod = netInterest / totalPayments;
+            } else {
+                // Actual days calculation (same day each month)
+                const buyDateObj = new Date(buyDate);
+                const maturityDateObj = new Date(maturityDate);
+                
+                // Calculate months between dates
+                let monthsDiff = (maturityDateObj.getFullYear() - buyDateObj.getFullYear()) * 12;
+                monthsDiff -= buyDateObj.getMonth();
+                monthsDiff += maturityDateObj.getMonth();
+                totalPayments = monthsDiff;
+                
+                interestPerPeriod = totalInterest / totalPayments;
+                taxPerPeriod = taxAmount / totalPayments;
+                netInterestPerPeriod = netInterest / totalPayments;
+            }
+            
+            let currentDate = new Date(buyDate);
+            let daysElapsed = 0;
+            
+            for (let i = 1; i <= totalPayments; i++) {
+                if (interestMethod === 'regular') {
+                    // Regular interval calculation
+                    switch(frequency) {
+                        case 'monthly':
+                            currentDate.setMonth(currentDate.getMonth() + 1);
+                            daysElapsed += 30;
+                            break;
+                        case 'quarterly':
+                            currentDate.setMonth(currentDate.getMonth() + 3);
+                            daysElapsed += 91;
+                            break;
+                        case 'annually':
+                            currentDate.setFullYear(currentDate.getFullYear() + 1);
+                            daysElapsed += 365;
+                            break;
+                    }
+                } else {
+                    // Actual days calculation (same day each month)
+                    currentDate.setMonth(currentDate.getMonth() + 1);
+                    // Keep the same day of the month as the buy date
+                    const buyDay = new Date(buyDate).getDate();
+                    const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+                    currentDate.setDate(Math.min(buyDay, lastDayOfMonth));
+                    
+                    // Calculate days between payments
+                    const prevDate = new Date(currentDate);
+                    prevDate.setMonth(prevDate.getMonth() - 1);
+                    daysElapsed += daysBetween(prevDate, currentDate);
+                }
+                
+                if (i === totalPayments) {
+                    daysElapsed = daysToMaturity;
+                    // Adjust the last payment date to match maturity date
+                    currentDate = new Date(maturityDate);
+                }
+                
+                const isLastPayment = i === totalPayments;
+                const principalPayment = isLastPayment ? totalAmount : 0;
+                const totalPayment = isLastPayment ? principalPayment + interestPerPeriod : interestPerPeriod;
+                
+                remainingBalance = isLastPayment ? 0 : remainingBalance;
+                
+                schedule.push({
+                    period: i,
+                    label: `${paymentLabel} ${i}`,
+                    date: new Date(currentDate),
+                    days: daysElapsed,
+                    principal: principalPayment,
+                    interest: interestPerPeriod,
+                    tax: taxPerPeriod,
+                    netInterest: netInterestPerPeriod,
+                    totalPayment: totalPayment,
+                    remainingBalance: remainingBalance
+                });
+                
+                if (!isLastPayment) {
+                    remainingBalance -= principalPayment;
+                }
+            }
+            
+            return schedule;
+        }
+        
+        // Populate repayment table
+        function populateRepaymentTable(schedule, bondColor) {
+            const table = document.createElement('table');
+            const thead = document.createElement('thead');
+            const tbody = document.createElement('tbody');
+            
+            thead.innerHTML = `
+                <tr>
+                    <th>Period</th>
+                    <th>Date</th>
+                    <th>Days</th>
+                    <th>Principal (₹)</th>
+                    <th>Interest (₹)</th>
+                    <th>Tax (₹)</th>
+                    <th>Net Interest (₹)</th>
+                    <th>Total Payment (₹)</th>
+                    <th>Remaining Balance (₹)</th>
+                </tr>
+            `;
+            
+            schedule.forEach(payment => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${payment.period}</td>
+                    <td>${payment.date.toLocaleDateString()}</td>
+                    <td>${payment.days}</td>
+                    <td>${payment.principal.toLocaleString('en-IN', {maximumFractionDigits: 2})}</td>
+                    <td>${payment.interest.toLocaleString('en-IN', {maximumFractionDigits: 2})}</td>
+                    <td>${payment.tax.toLocaleString('en-IN', {maximumFractionDigits: 2})}</td>
+                    <td>${payment.netInterest.toLocaleString('en-IN', {maximumFractionDigits: 2})}</td>
+                    <td>${payment.totalPayment.toLocaleString('en-IN', {maximumFractionDigits: 2})}</td>
+                    <td>${payment.remainingBalance.toLocaleString('en-IN', {maximumFractionDigits: 2})}</td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+            
+            table.appendChild(thead);
+            table.appendChild(tbody);
+            
+            return table;
+        }
+        
+        function checkIsNaN(val) {
+            return Number.isNaN(val) ? 0 : val;
+        }
+
+        // Calculate bond returns
+        function calculateBond(bondNumber) {
+            const bondName = document.getElementById(`bondName${bondNumber}`).value || `Bond ${bondNumber}`;
+            const faceValue = parseFloat(document.getElementById(`faceValue${bondNumber}`).value);
+            const units = checkIsNaN(parseInt(document.getElementById(`units${bondNumber}`).value));
+            const premium = checkIsNaN(parseFloat(document.getElementById(`premium${bondNumber}`).value));
+            const couponRate = checkIsNaN(parseFloat(document.getElementById(`couponRate${bondNumber}`).value));
+            const interestFrequency = document.getElementById(`interestFrequency${bondNumber}`).value;
+            const standardTax = checkIsNaN(parseFloat(document.getElementById(`standardTax${bondNumber}`).value));
+            const slabTax = checkIsNaN(parseFloat(document.getElementById(`slabTax${bondNumber}`).value));
+
+            // Get interest calculation method
+            const interestMethod = document.querySelector(`input[name="interestMethod${bondNumber}"]:checked`).value;
+            
+            const buyDate = new Date(document.getElementById(`buyDate${bondNumber}`).value);
+            const maturityDate = new Date(document.getElementById(`maturityDate${bondNumber}`).value);
+            
+            const daysToMaturity = daysBetween(buyDate, maturityDate);
+            const ytm = calculateYTM(faceValue, premium, couponRate, daysToMaturity);
+			document.getElementById(`ytmRate${bondNumber}`).value = ytm.toFixed(2);
+            
+            const totalPremium = premium * units;
+            const totalFaceValue = faceValue * units;
+            const totalInvestment = totalFaceValue + totalPremium;
+            
+            const dailyInterestRate = (couponRate / 100) / 365.25;
+            const dailyInterest = totalFaceValue * dailyInterestRate;
+            const totalInterest = dailyInterest * daysToMaturity;
+            
+            const effectiveTaxRate = (standardTax + slabTax);
+            const afterTaxInterest = totalInterest * (1 - effectiveTaxRate / 100);
+            
+            const yieldValue = (totalInterest / totalInvestment) * 100;
+            
+            const formattedBuyDate = buyDate.toLocaleDateString();
+            const formattedMaturityDate = maturityDate.toLocaleDateString();
+            
+            const bondColor = bondNumber === 1 ? '#3b82f6' : '#10b981';
+            
+            const repaymentSchedule = generateRepaymentSchedule(
+                faceValue, units, premium, couponRate, buyDate, maturityDate, 
+                interestFrequency, standardTax, slabTax, interestMethod, bondColor
+            );
+            
+            const repaymentTable = populateRepaymentTable(repaymentSchedule, bondColor);
+            
+            const resultsHTML = `
+                <div class="result-card">
+                    <div class="result-title" style="color: ${bondColor}">${bondName} Details</div>
+                    <div class="result-item">
+                        <div class="label">Bond Name</div>
+                        <div class="value">${bondName}</div>
+                    </div>
+                    <div class="result-grid">
+                        <div class="result-item">
+                            <div class="label">Investment Period</div>
+                            <div class="value">${formattedBuyDate} to ${formattedMaturityDate}</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="label">Days to Maturity</div>
+                            <div class="value">${daysToMaturity.toLocaleString()} days</div>
+                        </div>
+                    </div>
+                    <div class="result-grid">
+                        <div class="result-item">
+                            <div class="label">Total Investment</div>
+                            <div class="value">₹${totalInvestment.toLocaleString('en-IN', {maximumFractionDigits: 2})}</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="label">Total Premium Paid</div>
+                            <div class="value">₹${totalPremium.toLocaleString('en-IN', {maximumFractionDigits: 2})}</div>
+                        </div>
+                    </div>
+                    <div class="result-grid">
+                        <div class="result-item">
+                            <div class="label">Coupon / Interest Rate</div>
+                            <div class="value">${couponRate.toFixed(2)}%</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="label">Standard Tax Rate</div>
+                            <div class="value">${standardTax}% </div>
+                        </div>
+                    </div>
+                    <div class="result-grid">
+                        <div class="result-item">
+                            <div class="label">YTM Rate</div>
+                            <div class="value">${ytm.toFixed(2)}%</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="label">Effective Tax Rate</div>
+                            <div class="value">${effectiveTaxRate}%</div>
+                        </div>
+                    </div>
+                    <div class="result-item">
+                        <div class="label">Interest Calculation Method</div>
+                        <div class="value">${interestMethod === 'regular' ? 'Regular 30-day Intervals' : 'Actual Days (Same Day Each Month)'}</div>
+                    </div>
+                </div>
+                
+                <div class="result-card">
+                    <div class="result-title" style="color: ${bondColor}">Returns Summary</div>
+                    <div class="result-value">₹${afterTaxInterest.toLocaleString('en-IN', {maximumFractionDigits: 2})}</div>
+                    <div class="result-grid">
+                        <div class="result-item">
+                            <div class="label">Daily Interest</div>
+                            <div class="value">₹${dailyInterest.toLocaleString('en-IN', {maximumFractionDigits: 2})}</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="label">After Tax Returns</div>
+                            <div class="value">₹${afterTaxInterest.toLocaleString('en-IN', {maximumFractionDigits: 2})}</div>
+                        </div>
+                    </div>
+                    <div class="result-grid">
+                        <div class="result-item">
+                            <div class="label">Total Yield</div>
+                            <div class="value">${yieldValue.toFixed(2)}%</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="label">Total Interest</div>
+                            <div class="value">₹${totalInterest.toLocaleString('en-IN', {maximumFractionDigits: 2})}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="result-card">
+                    <div class="result-title" style="color: ${bondColor}">Repayment Schedule</div>
+                    <div class="repayment-table-container ${bondNumber === 1 ? 'bond-1-table' : 'bond-2-table'}">
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById(`bondResults${bondNumber}`).innerHTML = resultsHTML;
+            document.querySelector(`#bondResults${bondNumber} .repayment-table-container`).appendChild(repaymentTable);
+            
+            // Store results for comparison
+            window[`bond${bondNumber}Results`] = {
+                name: bondName,
+                yield: yieldValue,
+                afterTaxReturns: afterTaxInterest,
+                totalInvestment: totalInvestment,
+                color: bondColor,
+                interestMethod: interestMethod === 'regular' ? 'Regular 30-day Intervals' : 'Actual Days (Same Day Each Month)'
+            };
+        }
+        
+        // Compare both bonds
+        function compareBonds() {
+            if (!window.bond1Results) {
+                alert("Please calculate first bond");
+                return;
+            } else if (window.bond1Results && !window.bond2Results) {
+               calculateBond(2)
+			} else if (window.bond1Results && window.bond2Results) {
+				calculateBond(1); calculateBond(2);
+			}
+            
+            const bond1 = window.bond1Results;
+            const bond2 = window.bond2Results;
+            
+            let comparisonSummary = "";
+            let winner = "";
+            
+            comparisonSummary = `<strong>Bond 1:</strong> ${bond1.name} (${bond1.interestMethod})<br>`;
+            comparisonSummary += `<strong>Bond 2:</strong> ${bond2.name} (${bond2.interestMethod})<br><br>`;
+            
+            if (bond1.yield > bond2.yield) {
+                comparisonSummary += `${bond1.name} has a higher yield (${bond1.yield.toFixed(2)}% vs ${bond2.yield.toFixed(2)}%)`;
+                winner = `${bond1.name} is the better investment`;
+                document.getElementById('winnerDisplay').className = "winner bond-1-winner";
+            } else if (bond2.yield > bond1.yield) {
+                comparisonSummary += `${bond2.name} has a higher yield (${bond2.yield.toFixed(2)}% vs ${bond1.yield.toFixed(2)}%)`;
+                winner = `${bond2.name} is the better investment`;
+                document.getElementById('winnerDisplay').className = "winner bond-2-winner";
+            } else {
+                comparisonSummary += `Both bonds have the same yield (${bond1.yield.toFixed(2)}%)`;
+                winner = "It's a tie between both bonds";
+                document.getElementById('winnerDisplay').className = "winner tie";
+            }
+            
+            comparisonSummary += `<br>${bond1.name} after-tax returns: ₹${bond1.afterTaxReturns.toLocaleString('en-IN', {maximumFractionDigits: 2})}`;
+            comparisonSummary += `<br>${bond2.name} after-tax returns: ₹${bond2.afterTaxReturns.toLocaleString('en-IN', {maximumFractionDigits: 2})}`;
+            
+            document.getElementById('comparisonSummary').innerHTML = comparisonSummary;
+            document.getElementById('winnerDisplay').innerHTML = winner;
+            document.getElementById('comparisonResult').style.display = 'block';
+        }
+        
+        // Reset form
+        function resetForm() {
+            document.querySelectorAll('input').forEach(input => {
+                if (input.type !== 'button' && input.type !== 'radio') {
+                    input.value = input.defaultValue;
+                }
+            });
+            
+            // Reset radio buttons
+            document.getElementById('regularInterval1').checked = true;
+            document.getElementById('regularInterval2').checked = true;
+            
+            document.getElementById('bondName1').value = '';
+            document.getElementById('bondName2').value = '';
+            
+            setDefaultDates();
+            
+            document.getElementById('bondResults1').innerHTML = '';
+            document.getElementById('bondResults2').innerHTML = '';
+            
+            document.getElementById('comparisonResult').style.display = 'none';
+            document.querySelector('.bond-form-2').style.display = 'none';
+            document.getElementById('compareBtn').style.display = 'none';
+            document.getElementById('addBondBtn').style.display = 'inline-block';
+            
+            delete window.bond1Results;
+            delete window.bond2Results;
+        }
+        
+        // Set default dates on page load
+        window.onload = function() {
+            setDefaultDates();
+        };
+    </script>
+</body>
+</html>
