@@ -921,6 +921,8 @@
             
             const bondColor = bondNumber === 1 ? '#3b82f6' : '#10b981';
             
+            const totalInterestYieldMinusPremimumPaid = totalInterest - totalPremium;
+
             const repaymentSchedule = generateRepaymentSchedule(
                 faceValue, units, premium, couponRate, buyDate, maturityDate, 
                 interestFrequency, standardTax, slabTax, interestMethod, bondColor
@@ -1002,6 +1004,12 @@
                         <div class="result-item">
                             <div class="label">Total Interest</div>
                             <div class="value">₹${totalInterest.toLocaleString('en-IN', {maximumFractionDigits: 2})}</div>
+                        </div>
+                    </div>
+                    <div class="result-grid">
+                        <div class="result-item">
+                            <div class="label">Interest Yeild - Premimum Paid</div>
+                            <div class="value">₹${totalInterestYieldMinusPremimumPaid.toLocaleString('en-IN', {maximumFractionDigits: 2})}</div>
                         </div>
                     </div>
                 </div>
@@ -1097,13 +1105,15 @@
             const standardTax1 = parseFloat(document.getElementById('standardTax1').value);
             const slabTax1 = parseFloat(document.getElementById('slabTax1').value);
             const effectiveTaxRate1 = (standardTax1 + slabTax1);
-            const afterTaxInterest1 = totalInterest1 * (1 - effectiveTaxRate1 / 100);
+            let afterTaxInterest1 = totalInterest1 * (1 - effectiveTaxRate1 / 100);
+            afterTaxInterest1 = afterTaxInterest1 - (premium1 * units1);
             
             const standardTax2 = parseFloat(document.getElementById('standardTax2').value);
             const slabTax2 = parseFloat(document.getElementById('slabTax2').value);
             const effectiveTaxRate2 = (standardTax2 + slabTax2);
-            const afterTaxInterest2 = totalInterest2 * (1 - effectiveTaxRate2 / 100);
-            
+            let afterTaxInterest2 = totalInterest2 * (1 - effectiveTaxRate2 / 100);
+            afterTaxInterest2 = afterTaxInterest2 - (premium2 * units2);
+
             const yieldValue1 = (totalInterest1 / totalInvestment1) * 100;
             const yieldValue2 = (totalInterest2 / totalInvestment2) * 100;
             
