@@ -167,6 +167,11 @@
             flex: 1;
             min-width: 0;
         }
+
+        .bond-table-results {
+            flex: 1;
+            min-width: 0;
+        }
         
         .result-card {
             background: white;
@@ -222,7 +227,10 @@
         }
         
         th, td {
-            padding: 8px;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            padding-left: 2px;
+            padding-right: px;
             text-align: left;
             border-bottom: 1px solid #e5e7eb;
         }
@@ -613,14 +621,23 @@
             <div id="comparisonSummary">-</div>
             <div class="winner" id="winnerDisplay">-</div>
         </div>
-        
-        <div class="results-container">
+
+        <div class="results-container">  
             <div class="bond-results" id="bondResults1">
                 <!-- Results for Bond 1 will be inserted here -->
-            </div>
-            
+            </div>          
             <div class="bond-results" id="bondResults2">
                 <!-- Results for Bond 2 will be inserted here -->
+            </div>
+        </div>
+        <div class="results-container">  
+            <div class="bond-table-results" id="bondResults1-table">
+
+            </div>
+        </div>
+        <div class="results-container">                
+            <div class="bond-table-results" id="bondResults2-table">
+
             </div>
         </div>
     </div>
@@ -652,6 +669,8 @@
             maturityDate2.setFullYear(today.getFullYear() + 7);
             const maturityFormatted2 = maturityDate2.toISOString().split('T')[0];
             maturityDateInput2.value = maturityFormatted2;
+
+            
         }
         
         // Add second bond form
@@ -825,13 +844,13 @@
                 <tr>
                     <th>Period</th>
                     <th>Date</th>
-                    <th>Days</th>
-                    <th>Principal (₹)</th>
+                    <!-- <th>Days</th> -->
+                    <!-- <th>Principal (₹)</th> -->
                     <th>Interest (₹)</th>
                     <th>Tax (₹)</th>
                     <th>Net Interest (₹)</th>
-                    <th>Total Payment (₹)</th>
-                    <th>Remaining Balance (₹)</th>
+                    <!-- <th>Total Payment (₹)</th> -->
+                    <!-- <th>Remaining Balance (₹)</th> -->
                 </tr>
             `;
             
@@ -841,13 +860,13 @@
                 row.innerHTML = `
                     <td>${payment.period}</td>
                     <td>${payment.date.toLocaleDateString()}</td>
-                    <td>${payment.days}</td>
-                    <td>${payment.principal.toLocaleString('en-IN', {maximumFractionDigits: 2})}</td>
+                    <!-- <td>${payment.days}</td> -->
+                    <!-- <td>${payment.principal.toLocaleString('en-IN', {maximumFractionDigits: 2})}</td> -->
                     <td>${payment.interest.toLocaleString('en-IN', {maximumFractionDigits: 2})}</td>
                     <td>${payment.tax.toLocaleString('en-IN', {maximumFractionDigits: 2})}</td>
                     <td>${payment.netInterest.toLocaleString('en-IN', {maximumFractionDigits: 2})}</td>
-                    <td>${payment.totalPayment.toLocaleString('en-IN', {maximumFractionDigits: 2})}</td>
-                    <td>${payment.remainingBalance.toLocaleString('en-IN', {maximumFractionDigits: 2})}</td>
+                    <!-- <td>${payment.totalPayment.toLocaleString('en-IN', {maximumFractionDigits: 2})}</td> -->
+                    <!-- <td>${payment.remainingBalance.toLocaleString('en-IN', {maximumFractionDigits: 2})}</td> -->
                 `;
                 
                 tbody.appendChild(row);
@@ -986,19 +1005,52 @@
                         </div>
                     </div>
                 </div>
-                
-                <div class="result-card">
-                    <div class="result-title" style="color: ${bondColor}">Repayment Schedule</div>
-                    <div class="repayment-table-container bond-${bondNumber}-table">
-                        <!-- Table will be inserted here -->
-                    </div>
-                </div>
             `;
             
             const resultsContainer = document.getElementById(`bondResults${bondNumber}`);
             resultsContainer.innerHTML = resultsHTML;
-            resultsContainer.querySelector('.repayment-table-container').appendChild(repaymentTable);
+            //resultsContainer.querySelector('.repayment-table-container').appendChild(repaymentTable);
+
+            if(bondNumber === 1){
+                document.getElementById(`bondResults1`).style.display = 'block';   
+                document.getElementById(`bondResults2`).style.display = 'none';
+
+                document.getElementById(`bondResults1-table`).innerHTML = `
+                <div class="result-card">
+                    <div class="result-title" style="color:  #3b82f6;">Repayment Schedule</div>
+                    <div class="repayment-table-container bond-1-table" id="bond1-result-table">
+                        <!-- Table will be inserted here -->
+                    </div>
+                </div>`;
+                document.getElementById(`bondResults2-table`).innerHTML= '';
+
+                //document.getElementById(`bondResults1-table`).style.display = 'block';
+                //document.getElementById(`bondResults2-table`).style.display= 'none';
+                
+                const resultsTableContainer = document.getElementById(`bondResults1-table`);
+                resultsTableContainer.querySelector(`#bond1-result-table`).appendChild(repaymentTable);
+                //document.getElementById(`bondResults1-table`).appendChild(repaymentTable);
+
+            } else {
+                document.getElementById(`bondResults2`).style.display = 'block';
+                document.getElementById(`bondResults1`).style.display = 'block';
+
+                //document.getElementById(`bondResults1-table`).style.visibility = 'visible';
+                document.getElementById(`bondResults2-table`).innerHTML = `
+                <div class="result-card">
+                    <div class="result-title" style="color:  #3b82f6;">Repayment Schedule</div>
+                    <div class="repayment-table-container bond-2-table" id="bond2-result-table">
+                        <!-- Table will be inserted here -->
+                    </div>
+                </div>`;
             
+                //document.getElementById(`bondResults1-table`).style.display = 'block';
+                //document.getElementById(`bondResults2-table`).style.display = 'block';
+
+                const resultsTableContainer = document.getElementById(`bondResults2-table`);
+                resultsTableContainer.querySelector(`#bond2-result-table`).appendChild(repaymentTable);
+            }
+
             // Scroll to results for better mobile experience
             resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
@@ -1069,32 +1121,7 @@
             
             let comparisonSummary = '';
             let winnerDisplay = '';
-            
-            // comparisonSummary = `<strong>Bond 1:</strong> ${bond1Name} (${bond1InterestMethod})<br>`;
-            // comparisonSummary += `<strong>Bond 2:</strong> ${bond2Name} (${bond2InterestMethod}})<br><br>`;
-            
-            // if (yieldValue1 > yieldValue2) {
-            //     comparisonSummary += `${bond1Name} has a higher yield (${yieldValue1.toFixed(2)}% vs ${yieldValue2.toFixed(2)}%)`;
-            //     winner = `${bond1Name} is the better investment`;
-            //     document.getElementById('winnerDisplay').className = "winner bond-1-winner";
-            // } else if (yieldValue2 > yieldValue1) {
-            //     comparisonSummary += `${bond2Name} has a higher yield (${yieldValue2.toFixed(2)}% vs ${yieldValue1.toFixed(2)}%)`;
-            //     winner = `${bond2Name} is the better investment`;
-            //     document.getElementById('winnerDisplay').className = "winner bond-2-winner";
-            // } else {
-            //     comparisonSummary += `Both bonds have the same yield (${yieldValue1.toFixed(2)}%)`;
-            //     winner = "It's a tie between both bonds";
-            //     document.getElementById('winnerDisplay').className = "winner tie";
-            // }
-            
-            // comparisonSummary += `<br>${bond1Name} after-tax returns: ₹${bond1.afterTaxReturns.toLocaleString('en-IN', {maximumFractionDigits: 2})}`;
-            // comparisonSummary += `<br>${bond2Name} after-tax returns: ₹${bond2.afterTaxReturns.toLocaleString('en-IN', {maximumFractionDigits: 2})}`;
-            
-            //document.getElementById('comparisonSummary').innerHTML = comparisonSummary;
-            //document.getElementById('winnerDisplay').innerHTML = winner;
-            //document.getElementById('comparisonResult').style.display = 'block';
-
-
+    
             comparisonSummary = `<strong>Bond 1:</strong> ${bond1Name} (${bond1InterestMethod}<br>`;
             comparisonSummary += `<strong>Bond 2:</strong> ${bond2Name} (${bond2InterestMethod}<br><br>`;
 
@@ -1117,8 +1144,7 @@
             }
             
             document.getElementById('comparisonSummary').innerHTML = comparisonSummary;
-             //document.getElementById('comparisonSummary').textContent = comparisonSummary;
-             document.getElementById('winnerDisplay').textContent = winnerDisplay;
+            document.getElementById('winnerDisplay').textContent = winnerDisplay;
             
             // Scroll to comparison result for better mobile experience
             comparisonResult.scrollIntoView({ behavior: 'smooth' });
@@ -1137,11 +1163,18 @@
             document.querySelectorAll('.bond-results').forEach(container => {
                 container.innerHTML = '';
             });
+
+            document.querySelectorAll('.bond-table-results').forEach(container => {
+                container.innerHTML = '';
+            });
             
             document.getElementById('comparisonResult').style.display = 'none';
             document.querySelector('.bond-form-2').style.display = 'none';
             document.getElementById('compareBtn').style.display = 'none';
             document.getElementById('addBondBtn').style.display = 'inline-block';
+
+            //document.getElementById(`bondResults1-table`).style.visibility = 'hidden';
+            //document.getElementById(`bondResults2-table`).style.visibility= 'hidden';
             
             setDefaultDates();
         }
@@ -1182,6 +1215,13 @@
             document.getElementById('maturityDate2').addEventListener('change', function() {
                 updateYTM(2);
             });
+
+            //document.getElementById(`bondResults1-table`).style.visibility = 'hidden';
+            //document.getElementById(`bondResults2-table`).style.visibility = 'hidden';
+
+            //document.getElementById(`bondResults1-table`).style.display= 'none';
+            //document.getElementById(`bondResults2-table`).style.display= 'none';
+
         };
         
         function updateYTM(bondNumber) {
@@ -1198,6 +1238,7 @@
                 document.getElementById(`ytmRate${bondNumber}`).value = ytm.toFixed(2);
             }
         }
+    
     </script>
 </body>
 </html>
