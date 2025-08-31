@@ -1,0 +1,22 @@
+{
+  "name": "Bond Yield Calculator",
+  "short_name": "BYC",
+  "description": "A Bond Investment Yield Calculator",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#6a11cb",
+  "theme_color": "#6a11cb",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "web-app-manifest-192x192",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "web-app-manifest-512x512",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
